@@ -56,10 +56,18 @@
     </fileSets>
 
     <files>
+        <!-- OpenNMS-modified copy of Karaf's mvn:org.apache.karaf.features/standard/${karafVersion}/xml/features -->
         <file>
             <source>target/filtered-resources/features/features.xml</source>
             <outputDirectory>system/org/opennms/container/${project.artifactId}/${project.version}</outputDirectory>
-            <destName>${project.groupId}.${project.artifactId}-${project.version}-features.xml</destName>
+            <destName>${project.artifactId}-${project.version}-features.xml</destName>
+            <lineEnding>unix</lineEnding>
+        </file>
+        <!-- OpenNMS-modified copy of Karaf's mvn:org.apache.karaf.features/spring/${karafVersion}/xml/features -->
+        <file>
+            <source>target/filtered-resources/features/spring.xml</source>
+            <outputDirectory>system/org/opennms/container/${project.artifactId}/${project.version}</outputDirectory>
+            <destName>${project.artifactId}-${project.version}-spring.xml</destName>
             <lineEnding>unix</lineEnding>
         </file>
     </files>

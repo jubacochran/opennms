@@ -87,12 +87,6 @@
             <lineEnding>unix</lineEnding>
         </file>
         <file>
-            <source>${basedir}/target/classes/features.xml</source>
-            <outputDirectory>system/org/opennms/container/${project.artifactId}/${project.version}</outputDirectory>
-            <destName>${project.artifactId}-${project.version}-features.xml</destName>
-            <lineEnding>unix</lineEnding>
-        </file>
-        <file>
             <source>${basedir}/target/dependencies/opennms-branding.jar</source>
             <outputDirectory>lib</outputDirectory>
             <destName>opennms-branding.jar</destName>
