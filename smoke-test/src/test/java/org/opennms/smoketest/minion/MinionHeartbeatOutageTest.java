@@ -146,7 +146,7 @@ public class MinionHeartbeatOutageTest {
         try (final SshClient sshClient = new SshClient(opennmsSshAddr, "admin", "admin")) {
             PrintStream pipe = sshClient.openShell();
 
-            pipe.println("features:list -i");
+            pipe.println("feature:list -i");
             // Set the log level to INFO
             pipe.println("log:set INFO");//
             pipe.println("logout");

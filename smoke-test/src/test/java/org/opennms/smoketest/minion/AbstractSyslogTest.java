@@ -184,7 +184,7 @@ public abstract class AbstractSyslogTest {
                 // even if transient ES outages occur
                 pipe.println("config:propset retries 200");
                 pipe.println("config:update");
-                pipe.println("features:install opennms-es-rest");
+                pipe.println("feature:install opennms-es-rest");
             } else {
                 // Configure and install the Elasticsearch event forwarder
                 pipe.println("config:edit org.opennms.features.elasticsearch.eventforwarder");
@@ -194,10 +194,10 @@ public abstract class AbstractSyslogTest {
                 pipe.println("config:propset elasticsearchTransportPort 9300");
                 pipe.println("config:propset logAllEvents true");
                 pipe.println("config:update");
-                pipe.println("features:install opennms-elasticsearch-event-forwarder");
+                pipe.println("feature:install opennms-elasticsearch-event-forwarder");
             }
 
-            pipe.println("features:list -i");
+            pipe.println("feature:list -i");
             // Set the log level to INFO
             pipe.println("log:set INFO");
             pipe.println("logout");
