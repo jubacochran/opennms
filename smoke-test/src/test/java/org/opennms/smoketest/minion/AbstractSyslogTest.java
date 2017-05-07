@@ -176,23 +176,23 @@ public abstract class AbstractSyslogTest {
             if (useEsRest) {
                 // Configure and install the Elasticsearch REST event forwarder
                 pipe.println("config:edit org.opennms.plugin.elasticsearch.rest.forwarder");
-                pipe.println("config:propset logAllEvents true");
-                pipe.println("config:propset batchSize 500");
-                pipe.println("config:propset batchInterval 500");
-                pipe.println("config:propset timeout 5000");
+                pipe.println("config:property-set logAllEvents true");
+                pipe.println("config:property-set batchSize 500");
+                pipe.println("config:property-set batchInterval 500");
+                pipe.println("config:property-set timeout 5000");
                 // Retry enough times that all events are eventually sent
                 // even if transient ES outages occur
-                pipe.println("config:propset retries 200");
+                pipe.println("config:property-set retries 200");
                 pipe.println("config:update");
                 pipe.println("feature:install opennms-es-rest");
             } else {
                 // Configure and install the Elasticsearch event forwarder
                 pipe.println("config:edit org.opennms.features.elasticsearch.eventforwarder");
                 // Set the IP address for Elasticsearch to the address of the Docker host
-                pipe.println("config:propset elasticsearchIp " + InetAddress.getLocalHost().getHostAddress());
-                pipe.println("config:propset elasticsearchHttpPort 9200");
-                pipe.println("config:propset elasticsearchTransportPort 9300");
-                pipe.println("config:propset logAllEvents true");
+                pipe.println("config:property-set elasticsearchIp " + InetAddress.getLocalHost().getHostAddress());
+                pipe.println("config:property-set elasticsearchHttpPort 9200");
+                pipe.println("config:property-set elasticsearchTransportPort 9300");
+                pipe.println("config:property-set logAllEvents true");
                 pipe.println("config:update");
                 pipe.println("feature:install opennms-elasticsearch-event-forwarder");
             }

@@ -214,10 +214,10 @@ The properties file can also be edited using the Karaf Config Admin feature but 
 If you do use this method to edit the config, the config shell reacts to ! characters so you should escape any ! characters with \! as shown below.
 ----
 opennms> config:edit org.opennms.features.topology.plugins.topo.asset
-opennms> config:proplist
-opennms> config:propset asset.graph.definition.test providerId=test&label=asset2&assetLayers=asset-country,asset-city,asset-building&filter=asset-displaycategory=\!testDisplayCategory
+opennms> config:property-list
+opennms> config:property-set asset.graph.definition.test providerId=test&label=asset2&assetLayers=asset-country,asset-city,asset-building&filter=asset-displaycategory=\!testDisplayCategory
 opennms> config:update
-opennms> config:proplist
+opennms> config:property-list
    asset.graph.definition.test = providerId=test&label=asset2&assetLayers=asset-country,asset-city,asset-building&filter=asset-displaycategory=!testDisplayCategory
 ----
 
