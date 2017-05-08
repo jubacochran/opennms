@@ -10,6 +10,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <updatePolicy>interval:60</updatePolicy>
     <frontendPluginVersion>0.0.29</frontendPluginVersion>
+    <karafVersion>4.0.8</karafVersion>
     <nodeVersion>v6.10.2</nodeVersion>
     <npmVersion>3.10.10</npmVersion>
     <test.fork.count>1</test.fork.count>
