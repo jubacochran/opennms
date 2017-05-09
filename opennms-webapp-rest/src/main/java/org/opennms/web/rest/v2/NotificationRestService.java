@@ -80,7 +80,6 @@ public class NotificationRestService extends AbstractDaoRestService<OnmsNotifica
 
         // Order by ID by default
         builder.orderBy("notifyId").desc();
-        builder.distinct();
 
         return builder;
     }
