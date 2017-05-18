@@ -28,6 +28,8 @@
 
 package org.opennms.core.test.karaf.test;
 
+import static org.ops4j.pax.exam.CoreOptions.maven;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.opennms.core.test.karaf.KarafTestCase;
@@ -96,6 +98,8 @@ public class FeatureInstallKarafIT extends KarafTestCase {
      */
     @Test
     public void testInstallAllSpringFeatures() {
+        addFeaturesUrl(maven().groupId("org.apache.karaf.features").artifactId("spring-legacy").version("4.1.1").type("xml").classifier("features").getURL());
+
         installFeature("spring", "4.1.9.RELEASE_1");
         installFeature("spring-aspects", "4.1.9.RELEASE_1");
         installFeature("spring-instrument", "4.1.9.RELEASE_1");
