@@ -650,6 +650,7 @@ public class TopologyIT extends OpenNMSSeleniumTestCase {
     public void setUp() {
         topologyUiPage = new TopologyUIPage(this, getBaseUrl());
         topologyUiPage.open();
+        topologyUiPage.defaultFocus();
     }
 
     @Test
@@ -693,6 +694,50 @@ public class TopologyIT extends OpenNMSSeleniumTestCase {
     // Verifies that the ping operation is available. See NMS-9019
     @Test
     public void verifyPingOperation() throws InterruptedException, IOException {
+        createDummyNode();
+
+        // Find Node and try select ping from context menu
+        topologyUiPage.selectTopologyProvider(TopologyProvider.ENLINKD);
+        topologyUiPage.clearFocus();
+        topologyUiPage.refreshNow();
+        topologyUiPage.search("Dummy Node").selectItemThatContains("Dummy Node");
+        PingWindow pingWindow = topologyUiPage.findVertex("Dummy Node").contextMenu().ping();
+        pingWindow.close();
+    }
+
+    @Test
+    public void verifyCollapsibleCriteriaPersistence() throws IOException, InterruptedException {
+        createDummyNode();
+
+        // Search for category and select
+        topologyUiPage.search("Routers").selectItemThatContains("Routers");
+        List<FocusedVertex> focusedVertices = topologyUiPage.getFocusedVertices();
+        Assert.assertNotNull(focusedVertices);
+        Assert.assertEquals(1, focusedVertices.size());
+
+        logout();
+        login();
+
+        topologyUiPage.open();
+        focusedVertices = topologyUiPage.getFocusedVertices();
+        Assert.assertNotNull(focusedVertices);
+        Assert.assertEquals(1, focusedVertices.size());
+        Assert.assertEquals("Routers", focusedVertices.get(0).getLabel());
+    }
+
+    /**
+     * Verifies that the ip-like search produces no duplicates
+     * (issue NMS-9265 - by typing a complete ip address in the search box IpLikeSearchProvider returned 2 identical items)
+     */
+    @Test
+    public void verifyIpLikeSearch_noDuplicates() throws IOException, InterruptedException {
+        createDummyNode();
+        Assert.assertEquals(1, topologyUiPage.search("127.0.0.1").countItemsThatContain("127.0.0.1"));
+        Assert.assertEquals(1, topologyUiPage.search("127.0.0.*").countItemsThatContain("127.0.0.*"));
+        Assert.assertEquals(1, topologyUiPage.search("127.0.0.*").countItemsThatContain("127.0.0.1"));
+    }
+
+    private void createDummyNode() throws InterruptedException, IOException {
         // Create Dummy Node
         final String foreignSourceXML = "<foreign-source name=\"" + OpenNMSSeleniumTestCase.REQUISITION_NAME + "\">\n" +
                 "<scan-interval>1d</scan-interval>\n" +
@@ -705,6 +750,7 @@ public class TopologyIT extends OpenNMSSeleniumTestCase {
                 "       <interface ip-addr=\"127.0.0.1\" status=\"1\" snmp-primary=\"N\">" +
                 "           <monitored-service service-name=\"ICMP\"/>" +
                 "       </interface>" +
+                "       <category name=\"Routers\" />" +
                 "   </node>" +
                 "</model-import>";
         createRequisition(REQUISITION_NAME, requisitionXML, 1);
@@ -718,31 +764,6 @@ public class TopologyIT extends OpenNMSSeleniumTestCase {
             sendPost("/rest/events", new String(outputStream.toByteArray()), 204);
         }
         Thread.sleep(5000); // Wait to allow the event to be processed
-
-        // Find Node and try select ping from context menu
-        topologyUiPage.selectTopologyProvider(TopologyProvider.ENLINKD);
-        topologyUiPage.clearFocus();
-        topologyUiPage.refreshNow();
-        topologyUiPage.search("Dummy Node").selectItemThatContains("Dummy Node");
-        PingWindow pingWindow = topologyUiPage.findVertex("Dummy Node").contextMenu().ping();
-        pingWindow.close();
-    }
-
-    @Test
-	public void verifyCollapsibleCriteriaPersistence() {
-        // Search for category and select
-        topologyUiPage.search("Routers").selectItemThatContains("Routers");
-        List<FocusedVertex> focusedVertices = topologyUiPage.getFocusedVertices();
-        Assert.assertNotNull(focusedVertices);
-        Assert.assertEquals(1, focusedVertices.size());
-        
-        logout();
-        login();
-
-        topologyUiPage.open();
-        focusedVertices = topologyUiPage.getFocusedVertices();
-        Assert.assertNotNull(focusedVertices);
-        Assert.assertEquals(1, focusedVertices.size());
     }
     
     /**
@@ -757,24 +778,5 @@ public class TopologyIT extends OpenNMSSeleniumTestCase {
         } catch (InterruptedException e) {
             throw Throwables.propagate(e);
         }
-    }
-
-    /**
-     * Verifies that the ip-like search produces no duplicates
-     * (issue NMS-9265 - by typing a complete ip address in the search box IpLikeSearchProvider returned 2 identical items)
-     */
-    @Test
-    public void verifyIpLikeSearch_noDuplicates() {
-        final String requisitionXML = "<model-import foreign-source=\"" + OpenNMSSeleniumTestCase.REQUISITION_NAME + "\">" +
-                "   <node foreign-id=\"tests\" node-label=\"Yahoo\">" +
-                "       <interface ip-addr=\"46.228.47.114\" status=\"1\" snmp-primary=\"N\">" +
-                "           <monitored-service service-name=\"ICMP\"/>" +
-                "       </interface>" +
-                "   </node>" +
-                "</model-import>";
-        createRequisition(REQUISITION_NAME, requisitionXML, 1);
-        Assert.assertEquals(1, topologyUiPage.search("46.228.47.114").countItemsThatContain("46.228.47.114"));
-        Assert.assertEquals(1, topologyUiPage.search("46.228.47.*").countItemsThatContain("46.228.47.*"));
-        Assert.assertEquals(1, topologyUiPage.search("46.228.47.*").countItemsThatContain("46.228.47.114"));
     }
 }
