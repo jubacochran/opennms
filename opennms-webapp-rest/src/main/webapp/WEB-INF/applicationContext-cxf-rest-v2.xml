@@ -41,6 +41,8 @@
         <entry key="search.date-format" value="yyyy-MM-dd'T'HH:mm:ss.SSSZ"/>
         <!-- Do not strip any colons in the timezone (because the timezone is not exactly ISO-8601) -->
         <entry key="search.timezone.support" value="false"/>
+        <!-- The default FIQL Parser does not allow to register new type converters, so we write our own -->
+        <entry key="search.parser.class" value="org.opennms.web.rest.support.CustomFiqlParser"/>
       </jaxrs:properties>
       <jaxrs:extensionMappings>
         <entry key="json" value="application/json" />
